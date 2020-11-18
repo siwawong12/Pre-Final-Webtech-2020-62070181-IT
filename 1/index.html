@@ -1,17 +1,79 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre Final Quiz 1</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            font-size: 10px;
+        }
+        
+        .card-img {
+            height: 100%;
+            width: 100%;
+        }
+        
+        .card-title {
+            text-align: center;
+        }
+        
+        .card-text {
+            padding: 5px;
+            font-size: 15px;
+        }
+        
+        .col-md-4 {
+            padding: 20px;
+            padding-bottom: 50px;
+        }
+    </style>
 </head>
 
 <body>
+    <div>
+        <div id="music" class="row m-1"></div>
+    </div>
+    <script>
+        let requestURL = 'ezquiz.json';
+        let request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState == 4 && request.status == 200) {
+                dataReportStatus(JSON.parse(request.responseText));
+            }
+        };
+        request.open("GET", requestURL, true);
+        request.send();
 
+        function dataReportStatus(data) {
+            let music = document.getElementById("music");
+            let info, name, release, poster, artist, avaliable;
+
+            for (let i = 0; i < data.tracks.items.length; i++) {
+                info = "";
+                name = data.tracks.items[i].album.name;
+                artist = data.tracks.items[i].artists[0].name;
+                release = data.tracks.items[i].album.release_date;
+                poster = data.tracks.items[i].album.images[0].url;
+                avaliable = data.tracks.items[i].available_markets.length;
+
+                info += "<div class='col-md-4'>";
+                info += "<div class='card p-0 w-100'>";
+                info += "<img class='card-img' src='" + poster + "' alt=''>";
+                info += "<h5 class='card-title pt-3'><b>" + name + "</b></h5>";
+                info += "<p class='card-text'>Artist: " + artist + "</p>";
+                info += "<p class='card-text'>Release date: " + release + "</p>";
+                info += "<p class='card-text pb-3'>Avaliable: " + avaliable + " countries</p>";
+                info += "</div></div>";
+                music.innerHTML += info;
+            }
+        }
+    </script>
 </body>
 
 </html>
